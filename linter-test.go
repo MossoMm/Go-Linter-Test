@@ -1,7 +1,4 @@
 package main
-//dmwqndqwjhweuicv  kajdfajhja
-######
-qwdojqw
 import (
 	"fmt"
 	"math/big"
