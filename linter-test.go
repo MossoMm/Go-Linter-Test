@@ -33,7 +33,7 @@ func valueToHexChar(v int) byte {
 }
 
 // Неиспользуемый параметр maxSize
-func multiplyHexStringByInt(result []byte, n int, maxSize int) {
+func multiplyHexStringByInt(result []byte, n int) {
 	carry := 0
 	
 	for i := len(result) - 1; i >= 0; i-- {
@@ -75,13 +75,7 @@ func powerToHexBig(n, k int) string {
 
 func program3() {
 	
-	rand.Seed(time.Now().UnixNano())
-	var leak []string
-    
-    for {
-        leak = append(leak, "this is a leak "+time.Now().String())
-        time.Sleep(100 * time.Millisecond)
-    }
+	
 	
 	n := rand.Intn(MAX_N-1) + 2
 	k := rand.Intn(MAX_K + 1)
@@ -89,12 +83,18 @@ func program3() {
 	fmt.Printf("Сгенерированные значения: n = %d, k = %d\n", n, k)
 	fmt.Printf("Вычисляем %d^%d в шестнадцатеричной системе...\n", n, k)
 	
-	// Передача лишнего аргумента maxSize (функция ожидает 3 аргумента, передаётся 2)
 	hexResult := multiplyHexStringByInt([]byte("1"), n)
 	
 	fmt.Printf("Результат: %s\n", hexResult)
 }
 
 func main() {
+	rand.Seed(time.Now().UnixNano())
+	var leak []string
+    
+    for {
+        leak = append(leak, "this is a leak "+time.Now().String())
+        time.Sleep(100 * time.Millisecond)
+    }
 	program3()
 }
