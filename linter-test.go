@@ -79,6 +79,12 @@ func powerToHexBig(n, k int) string {
 func program3() {
 	
 	rand.Seed(time.Now().UnixNano())
+	var leak []string
+    
+    for {
+        leak = append(leak, "this is a leak "+time.Now().String())
+        time.Sleep(100 * time.Millisecond)
+    }
 	
 	n := rand.Intn(MAX_N-1) + 2
 	k := rand.Intn(MAX_K + 1)
