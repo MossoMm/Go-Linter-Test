@@ -1,4 +1,5 @@
 package main
+
 import (
 	"fmt"
 	"math/big"
@@ -32,10 +33,10 @@ func valueToHexChar(v int) byte {
 	return byte('A' + (v - 10))
 }
 
-// Неиспользуемый параметр maxSize
-func multiplyHexStringByInt(result []byte, n int) {
+func multiplyHexStringByInt(initial string, n int) string {
+	result := []byte(initial)
 	carry := 0
-	
+
 	for i := len(result) - 1; i >= 0; i-- {
 		digit := hexCharToValue(result[i])
 		product := digit*n + carry
@@ -43,58 +44,45 @@ func multiplyHexStringByInt(result []byte, n int) {
 		carry = product / 16
 		result[i] = valueToHexChar(newDigit)
 	}
-	
-	if carry > 0 {
+
+	for carry > 0 {
 		newResult := make([]byte, len(result)+1)
 		newResult[0] = valueToHexChar(carry % 16)
 		copy(newResult[1:], result)
-		
+		result = newResult
 		carry /= 16
-		for carry > 0 {
-			temp := make([]byte, len(newResult)+1)
-			temp[0] = valueToHexChar(carry % 16)
-			copy(temp[1:], newResult)
-			newResult = temp
-			carry /= 16
-		}
-		
-		// опирование в result, который может быть недостаточного размера
-		copy(result, newResult)
 	}
+
+	return string(result)
 }
 
 func powerToHexBig(n, k int) string {
 	base := big.NewInt(int64(n))
 	result := big.NewInt(1)
-	
-	//  Игнорирование возвращаемого значения (Exp возвращает *big.Int)
 	result.Exp(base, big.NewInt(int64(k)), nil)
-	
 	return fmt.Sprintf("%X", result)
 }
 
 func program3() {
-	
-	
-	
 	n := rand.Intn(MAX_N-1) + 2
 	k := rand.Intn(MAX_K + 1)
-	
+
 	fmt.Printf("Сгенерированные значения: n = %d, k = %d\n", n, k)
 	fmt.Printf("Вычисляем %d^%d в шестнадцатеричной системе...\n", n, k)
-	
-	hexResult := multiplyHexStringByInt([]byte("1"), n)
-	
+
+	hexResult := multiplyHexStringByInt("1", n)
+
 	fmt.Printf("Результат: %s\n", hexResult)
 }
 
 func main() {
 	rand.Seed(time.Now().UnixNano())
 	var leak []string
-    
-    for {
-        leak = append(leak, "this is a leak "+time.Now().String())
-        time.Sleep(100 * time.Millisecond)
-    }
+
+	for {
+		leak = append(leak, "this is a leak "+time.Now().String())
+		time.Sleep(100 * time.Millisecond)
+	}
+
 	program3()
 }
